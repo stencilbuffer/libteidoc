@@ -24,11 +24,17 @@ public class TEIElementHandler {
 	
 	protected Attributes attributes;
 	protected boolean ignoreContent;
+	protected String qName;
 	
-	public void start() {}
+	public void start(String qn) {
+		qName = qn;
+	}
 	public void end() {}
 	public void characters(String s) {}
 	public void setAttributes(Attributes a) {
 		attributes = a;
+	}
+	public String getQName() {
+		return qName;
 	}
 }

@@ -108,8 +108,8 @@ public class TEIDocument extends DefaultHandler {
 			}
 		}
 		
-		TEIElementHandler handler = elementMap.get(qName);
 		// Do we have to deal with this element?
+		TEIElementHandler handler = elementMap.get(qName);
 		if (handler == null) {
 			ignore = true;
 		}
@@ -118,7 +118,7 @@ public class TEIDocument extends DefaultHandler {
 			ignore = false;
 			
 			handler.setAttributes(attributes);
-			handler.start();
+			handler.start(qName);
 			
 			elementStack.push(handler);
 		}
@@ -128,11 +128,16 @@ public class TEIDocument extends DefaultHandler {
     public void endElement(String uri, String local, String qN) {
 		
 		//String qName = qN.toLowerCase();
+		
+		// Do not pop elements that previously have been ignored!
 		if (!elementStack.isEmpty()) {
-			elementStack.pop().end();
+
+			if (elementStack.peek().getQName().equals(qN)) {
+				elementStack.pop().end();
+			}
 		}
 		
-		//logger.debug("Ended element '"+qName+"'");
+		//logger.debug("Ended element '"+qN+"'");
 		
 		// Is this really correct?
 		ignore = false;
